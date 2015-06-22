@@ -3,22 +3,22 @@
 
 typedef struct adj {
     int i;
-    adj *next;
+    struct adj *next;
 } adj;
 
 typedef struct node {
   int i, size, grau;
-  node *next;
-  adj *adjInit;
+  struct node *next;
+  struct adj *adjInit;
 } node;
 
 void insertNode(node *init, int index, int adj) {
     node *aux;
     if (init == (node *) NULL) {
         init = (node *) malloc(sizeof(node));
-        init->next = (node *) NULL;
+        init->next = NULL;
         init->i = index;
-        init->adj = (adj *) NULL;
+        init->adjInit = NULL;
         init->grau = 0;
     }
     else {
@@ -26,7 +26,7 @@ void insertNode(node *init, int index, int adj) {
         aux->next = (node *) malloc(sizeof(node));
         aux->next->next = (node *) NULL;
         aux->next->i = index;
-        aux->next->adj = (adj *) NULL;
+        aux->next->adjInit = NULL;
         aux->next->grau = 0;
     }
 
@@ -55,7 +55,7 @@ void setAdj(adj *init, int index, int val) {
     adj *aux;
     for (aux = init; aux; aux = aux->next) {
         if (aux->i = index) {
-            aux->size = val;
+            aux->i = val;
             break;
         }
     }
@@ -71,12 +71,13 @@ int getAdj(adj *init, int iterations) {
     return aux->i;
 }
 
-int getOnAdj(adj *init, int index, int indexAdj) {
+int getOnAdj(node *init, int index, int indexAdj) {
     node *aux;
     adj *aux2;
     for (aux = init; aux; aux = aux->next) {
         for (aux2 = aux->adjInit; aux2; aux2 = aux2->next) {
-            if (aux2->i == index) {
+            if (aux2->i == indexAdj) {
+                return aux2->i;
             }
         }
     }
@@ -197,11 +198,12 @@ int main() {
 
     for (i = 0; i < getSize(init, getAdj(q, j)); i++) { // g[q[j]-1].size
       if (getGrau(init, getOnAdj(init, getAdj(q, j), i)) - 1 == 0) { // --g[g[q[j]-1].adj[i] - 1].grau
-        q[counter] = g[g[q[j]-1].adj[i] - 1].i;
+        setAdj(q, counter + 1, getOnAdj(init, getAdj(q, j), i)); //q[counter] = g[g[q[j]-1].adj[i] - 1].i;
         counter++;
       }
     }
-    q[j] = -1;
+    setAdj(q, j, -1);
+    //q[j] = -1;
     j++;
   }
   puts("");
