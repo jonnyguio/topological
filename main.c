@@ -42,6 +42,47 @@ void setSize(node *init, int index, int size) {
     }
 }
 
+int getSize(node *init, int index) {
+    node *aux;
+    for (aux = init; aux; aux = aux->next) {
+        if (aux->i == index)
+            return aux->size;
+    }
+    return -1;
+}
+
+void setAdj(adj *init, int index, int val) {
+    adj *aux;
+    for (aux = init; aux; aux = aux->next) {
+        if (aux->i = index) {
+            aux->size = val;
+            break;
+        }
+    }
+}
+
+int getAdj(adj *init, int iterations) {
+    int i;
+    adj *aux;
+    aux = init;
+    for (i = 0; i < iterations; i++) {
+        aux = aux->next;
+    }
+    return aux->i;
+}
+
+int getOnAdj(adj *init, int index, int indexAdj) {
+    node *aux;
+    adj *aux2;
+    for (aux = init; aux; aux = aux->next) {
+        for (aux2 = aux->adjInit; aux2; aux2 = aux2->next) {
+            if (aux2->i == index) {
+            }
+        }
+    }
+
+}
+
 void insertOnAdj(adj *init, int val) {
     adj *aux;
     if (init != (adj *) NULL) {
@@ -74,6 +115,16 @@ void increaseGrau(node *init, int index) {
             aux->grau++;
         }
     }
+}
+
+int getGrau(node *init, int index) {
+    node *aux;
+    for (aux = init; aux; aux = aux->next) {
+        if (aux->i == index) {
+            return aux->grau;
+        }
+    }
+    return -1;
 }
 
 int main() {
@@ -122,30 +173,34 @@ int main() {
     }
   }
 
-  int *q, *result;
-  q = malloc(sizeof(int)*n);
+  adj *q;
+  //int *q;
+  q = (adj *) malloc(sizeof(adj));
+  //q = malloc(sizeof(int)*n);
 
   counter = 0;
   for (i = 0; i < n; i++) {
-    q[i] = 0;
-    if (g[i].grau == 0) {
-      q[counter] = g[i].i;
+    //q[i] = 0;
+    insertOnAdj(q, 0);
+    //if (g[i].grau == 0) {
+    if (getSize(init, i + 1)) {
+      setAdj(q, counter + 1, i + 1);
+      //q[counter] = g[i].i;
       counter++;
     }
   }
 
   j = 0;
-  while (q[n-1] != -1) {
+  while (getAdj(q, n - 1) != -1) { // q[n-1]
 
-    printf("%d ", q[j]);
+    printf("%d ", getAdj(q, j)); // q[j]
 
-    for (i = 0; i < g[q[j]-1].size; i++) {
-      if (--g[g[q[j]-1].adj[i] - 1].grau == 0) {
+    for (i = 0; i < getSize(init, getAdj(q, j)); i++) { // g[q[j]-1].size
+      if (getGrau(init, getOnAdj(init, getAdj(q, j), i)) - 1 == 0) { // --g[g[q[j]-1].adj[i] - 1].grau
         q[counter] = g[g[q[j]-1].adj[i] - 1].i;
         counter++;
       }
     }
-
     q[j] = -1;
     j++;
   }
