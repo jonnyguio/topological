@@ -76,7 +76,6 @@ int getOnAdj(node *init, int index, int indexAdj) {
     adj *aux2;
     for (aux = init; aux; aux = aux->next) {
         for (aux2 = aux->adjInit; aux2; aux2 = aux2->next) {
-            if (aux2->i == indexAdj) {
                 return aux2->i;
             }
         }
